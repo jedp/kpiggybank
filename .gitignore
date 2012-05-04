@@ -1,0 +1,15 @@
+# vim ancillary files
+*.un~
+*.swp
+*.swo
+
+# couchdb config
+env.sh
+
+# other stuff
+.DS_Store?
+
+# locally installed node modules
+node_modules
+.gitmodules
+

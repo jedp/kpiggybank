@@ -1,0 +1,27 @@
+{
+    "name": "kpiggybank",
+    "version": "0.0.1",
+    "private": true,
+
+    "description": "Storage service for KPI data blobs",
+    "main": "lib/kpiggybank.js",
+
+    "dependencies": {
+      "express": "2.5.9",
+      "jade": ">= 0.25.0",
+      "cradle": "0.6.3"
+    },
+
+    "devDependencies": {
+        "vows": "0.6.2"
+    },
+
+    "scripts": {
+        "start": "node lib/kpiggybank.js",
+        "test": "vows test/*.js --spec"
+    },
+
+    "engines": {
+        "node": ">= 0.6.16"
+    }
+}
