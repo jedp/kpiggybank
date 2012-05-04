@@ -99,17 +99,22 @@ vows.describe("Blob storage")
 })
 
 
-/*
 .addBatch({
   "The API": {
     topic: function() {
-      // post blob
+      var config = require("../lib/config");
+      var api = new(require("../lib/api"))(config.server_host, config.server_port);
+      var cb = this.callback;
+      api.saveData(BLOB_DATA, function(err) { 
+        return cb(null, err); 
+      });
     },
 
-    // ...
+    "can save a blob": function(err) {
+      assert(err === null);
+    }, 
   }
 })
-*/
 
 .addBatch({
   "In the end": {
