@@ -15,6 +15,9 @@ process.env['KPIG_COUCHDB_DB'] = "bid_kpi_test";
 // clean up properly :)
 process.env['KPIG_SERVER_PORT'] = "3042";
 
+// After env is set, we can get config (because config reads env)
+var config = require("../lib/config");
+
 var kpiggybankProcess = undefined;
 
 // delete the database.
@@ -28,6 +31,50 @@ function deleteDB(callback) {
       return db.db.exists(callback);
     });
   });
+}
+
+/*
+ * Check that for db, there is a document where key===value
+ * within the specified interval.  
+ *
+ * This does an exponential backoff on an (inefficient) temporaryView.
+ * The reduce function returns the first matching document, so the caller
+ * should expect either a single document to be returned or an error.
+ */
+function expectEventually(key, value, db, interval, callback) {
+  value = value.toString();
+  function retrieveWithinTime(time) {
+    db.temporaryView(
+      {
+        map: function (doc) {
+         emit(doc._id, doc);
+       }
+      }, 
+      function (err, results) {
+        // If there was an error (like not_found) or there were no
+        // results, then try again in a little while.  Gradually back
+        // off the time until the interval is exceeded.  If nothing
+        // is discovered, callback with an error.
+        if ((err || results.length === 0) && (time < interval)) {
+          time *= 2;
+          setTimeout(function() {
+            retrieveWithinTime(time);
+          }, time);
+        } else {
+          var found = false;
+          results.forEach(function(result) {
+            if (result[key] === value) {
+              found = true;
+              return callback(null, result);
+            }
+          });
+          if (!found) return callback(new Error("Not found"));
+        }
+      }
+    );
+  }
+  // start at 1ms and go up exponentially from there
+  retrieveWithinTime(1);
 }
 
 process.on('exit', function() {
@@ -66,7 +113,6 @@ vows.describe("Blob storage")
 .addBatch({
   "In the beginning": {
     topic: function() {
-      console.log("delete db at startup");
       deleteDB(this.callback);
     },
 
@@ -98,21 +144,30 @@ vows.describe("Blob storage")
   }
 })
 
-
 .addBatch({
-  "The API": {
+  "We can save a blob": {
     topic: function() {
-      var config = require("../lib/config");
       var api = new(require("../lib/api"))(config.server_host, config.server_port);
       var cb = this.callback;
-      api.saveData(BLOB_DATA, function(err) { 
-        return cb(null, err); 
+      var blob_data = BLOB_DATA;
+
+      api.saveData(BLOB_DATA, function(err, result) { 
+        return cb(err, result); 
       });
     },
 
-    "can save a blob": function(err) {
-      assert(err === null);
-    }, 
+    "and eventually retrieve it straight from couch": {
+      topic: function(result) {
+        var cradle = require('cradle');
+        var conn = new (cradle.Connection)(config.couchdb_host, config.couchdb_port);
+        var db = conn.database(config.couchdb_db);
+        expectEventually("timestamp", 1333046104322, db, 1000, this.callback);
+      },
+
+      "and see what we saved": function(obj) {
+        assert(parseInt(obj.timestamp, 10) === BLOB_DATA.timestamp);
+      }
+    }
   }
 })
 
