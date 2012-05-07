@@ -44,7 +44,14 @@ kpiggybank will look for the following environment variables:
 - `KPIG_SERVER_PORT`: Port for the kpiggybank server.  Default "3000".
 - `KPIG_SERVER_MODE`: Governs how verbose logging should be.  Set to "prod" for quieter logging.  Default "dev".
 
+Start the server like so:
+
 - `npm start`
+
+
+Or like so:
+
+- `node lib/server.js`
 
 Or change your env configuration with something like:
 
@@ -77,9 +84,8 @@ HTTP API
 
 Post a blob of data to `/wsapi/interaction_data`.  
 The post `data` should contain a JSON object following
-the example here:
-
-    https://wiki.mozilla.org/Privacy/Reviews/KPI_Backend#Example_data
+the example here: 
+https://wiki.mozilla.org/Privacy/Reviews/KPI_Backend#Example_data
 
 In particular, the `timestamp` field is required, and should be a unix 
 timestamp (seconds since the epoch); not an ISO date string.
