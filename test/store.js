@@ -151,27 +151,44 @@ vows.describe("Blob storage")
 })
 
 .addBatch({
-  "10k blobs with sequential timestamps can be stored": {
+  "Many blobs with sequential timestamps can be stored": {
     topic: function() {
+      var start_time = new Date();
+      // our actual api
       var api = new API(config.server_host, config.server_port);
+      // a lower-level handle on couchdb so we can query it directly
       var conn = new (cradle.Connection)(config.couchdb_host, config.couchdb_port);
       var db = conn.database(config.couchdb_db);
+      var cb = this.callback;
       var i;
       var start = 1333046104322; // realistic timestamp
-      var finish = start + 5000;
+      var finish = start + 1000;
       var blob;
       for (i=start; i<=finish; i++) {
         blob = makeBlob(i);
         api.saveData(blob);
       }
       // last record should have been saved within a second
-      expectEventually("timestamp", finish, db, 5000, this.callback);
+      expectEventually("timestamp", finish, db, 1000, function(err, results) {
+        return cb(results, start_time);
+      });
     },
 
-    "within 5 seconds": function(obj) {
-      assert(parseInt(obj.timestamp, 10) === (1333046104322 + 5000));
-    }
+    "successfully": function(obj, start_time) {
+      assert(parseInt(obj.timestamp, 10) === (1333046104322 + 1000));
+    },
 
+    /*
+     * Scaling to 1M users anticipates approx 100 signin activities per second.
+     * https://github.com/mozilla/browserid/wiki/Scaling-to-1M
+     * So we should be able to keep pace with that.  
+     */
+
+    "at the rate we expect for signins by 1M users": function(obj, start_time) {
+      // Be able to store data twice as fast as we expect it to arrive.
+      // Here, less than 5 secs for what should take 10 secs to arrive.
+      assert((new Date()) - start_time < (5000));
+    }
   }
 })
 
