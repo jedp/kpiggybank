@@ -1,5 +1,7 @@
 var vows = require("vows");
 var assert = require("assert");
+var cradle = require("cradle");
+var API = require("../lib/api");
 var spawn = require("child_process").spawn;
 var path = require("path");
 var DB = require("../lib/db");
@@ -51,23 +53,25 @@ function expectEventually(key, value, db, interval, callback) {
        }
       }, 
       function (err, results) {
-        // If there was an error (like not_found) or there were no
-        // results, then try again in a little while.  Gradually back
+        // If there was an error (like not_found) or the expected value
+        // is not in the result set, try again in a little while.  Back
         // off the time until the interval is exceeded.  If nothing
         // is discovered, callback with an error.
-        if ((err || results.length === 0) && (time < interval)) {
-          time *= 2;
-          setTimeout(function() {
-            retrieveWithinTime(time);
-          }, time);
-        } else {
-          var found = false;
+        var found = false;
+        if ((!err) && (results.length > 0)) {
           results.forEach(function(result) {
             if (result[key] === value) {
               found = true;
               return callback(null, result);
             }
           });
+        }
+        if (time < interval) {
+          time *= 2;
+          setTimeout(function() {
+            retrieveWithinTime(time);
+          }, time);
+        } else {
           if (!found) return callback(new Error("Not found"));
         }
       }
@@ -83,8 +87,9 @@ process.on('exit', function() {
   }
 });
 
-const BLOB_DATA = {
-    "timestamp": 1333046104322,
+function makeBlob(timestamp) {
+  return {
+    "timestamp": timestamp,
     "event_stream": [
          [ "picker", 732 ],
          [ "picker::change", 1700 ],
@@ -106,6 +111,7 @@ const BLOB_DATA = {
       "browser": "Safari",
       "version": "5.1"  
     }
+  };
 };
 
 vows.describe("Blob storage")
@@ -145,29 +151,27 @@ vows.describe("Blob storage")
 })
 
 .addBatch({
-  "We can save a blob": {
+  "10k blobs with sequential timestamps can be stored": {
     topic: function() {
-      var api = new(require("../lib/api"))(config.server_host, config.server_port);
-      var cb = this.callback;
-      var blob_data = BLOB_DATA;
-
-      api.saveData(BLOB_DATA, function(err, result) { 
-        return cb(err, result); 
-      });
+      var api = new API(config.server_host, config.server_port);
+      var conn = new (cradle.Connection)(config.couchdb_host, config.couchdb_port);
+      var db = conn.database(config.couchdb_db);
+      var i;
+      var start = 1333046104322; // realistic timestamp
+      var finish = start + 5000;
+      var blob;
+      for (i=start; i<=finish; i++) {
+        blob = makeBlob(i);
+        api.saveData(blob);
+      }
+      // last record should have been saved within a second
+      expectEventually("timestamp", finish, db, 5000, this.callback);
     },
 
-    "and eventually retrieve it straight from couch": {
-      topic: function(result) {
-        var cradle = require('cradle');
-        var conn = new (cradle.Connection)(config.couchdb_host, config.couchdb_port);
-        var db = conn.database(config.couchdb_db);
-        expectEventually("timestamp", 1333046104322, db, 1000, this.callback);
-      },
-
-      "and see what we saved": function(obj) {
-        assert(parseInt(obj.timestamp, 10) === BLOB_DATA.timestamp);
-      }
+    "within 5 seconds": function(obj) {
+      assert(parseInt(obj.timestamp, 10) === (1333046104322 + 5000));
     }
+
   }
 })
 
