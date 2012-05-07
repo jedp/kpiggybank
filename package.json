@@ -17,11 +17,11 @@
     },
 
     "scripts": {
-        "start": "node lib/kpiggybank.js",
+        "start": "node lib/server.js",
         "test": "vows test/*.js --spec"
     },
 
     "engines": {
-        "node": ">= 0.6.16"
+        "node": ">= 0.6.17"
     }
 }
