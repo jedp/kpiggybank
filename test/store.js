@@ -211,7 +211,7 @@ vows.describe("Blob storage")
     "can fetch by closed date range": {
       topic: function() {
         var api = new API(config.server_host, config.server_port);
-        api.fetchRange(START_TIME, START_TIME+9, this.callback);
+        api.fetchRange({start: START_TIME, end: START_TIME+9}, this.callback);
       },
 
       "successfully": function(err, records) {
@@ -222,7 +222,7 @@ vows.describe("Blob storage")
     "can fetch by open date range": {
       topic: function() {
         var api = new API(config.server_host, config.server_port);
-        api.fetchRange(START_TIME+991, this.callback);
+        api.fetchRange({start: START_TIME+991}, this.callback);
       },
 
       "successfully": function(err, records) {

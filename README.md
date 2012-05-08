@@ -79,11 +79,12 @@ The callback is optional.
 
 To query a range:
 
-    api.fetchRange(start, end, callback);
+    var options = {start: 1, end: 42}; // optional 
+    api.fetchRange(options, callback);
 
-`end` is optional, so you can query all records after a given start time:
+options are ... optional, so you can get all records like so:
 
-    api.fetchRange(start, callback);
+    api.fetchRange(callback);
 
 To count the number of records:
 
