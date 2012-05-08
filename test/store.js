@@ -206,7 +206,29 @@ vows.describe("Blob storage")
       "that works": function(count) {
         assert(count === 1001);
       }
-    }
+    }, 
+
+    "can fetch by closed date range": {
+      topic: function() {
+        var api = new API(config.server_host, config.server_port);
+        api.fetchRange(START_TIME, START_TIME+9, this.callback);
+      },
+
+      "successfully": function(err, records) {
+        assert(records.length === 10);
+      }
+    },
+
+    "can fetch by open date range": {
+      topic: function() {
+        var api = new API(config.server_host, config.server_port);
+        api.fetchRange(START_TIME+991, this.callback);
+      },
+
+      "successfully": function(err, records) {
+        assert(records.length === 10);
+      }
+    },
   }
 })
 
@@ -227,7 +249,6 @@ vows.describe("Blob storage")
       assert(stopped === true);
     },
 
-/*
     "the database": {
       topic: function() {
         deleteDB(this.callback);
@@ -237,7 +258,6 @@ vows.describe("Blob storage")
         assert(exists === false);
       }
     }
-*/
   }
 })
 
