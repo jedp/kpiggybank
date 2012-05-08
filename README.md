@@ -77,6 +77,14 @@ API:
 
 The callback is optional.
 
+To query a range:
+
+    api.fetchRange(start, end, yourcalback);
+
+`end` is optional, so you can query all records after a given start time:
+
+    api.fetchRange(start, yourcallback);
+
 HTTP API
 --------
 
@@ -96,10 +104,9 @@ timestamp (seconds since the epoch); not an ISO date string.
 
 *Get Data*
 
-Not yet implemented
+Retrieve a range of records; returns a JSON string.
 
-- url: `/wsapi/interaction_data?startkey=<date-start>&endkey=<date-end>`
+- url: `/wsapi/interaction_data?start=<date-start>&end=<date-end>`
 - method: GET
-- optional params: `startkey`, `endkey`
 
 
