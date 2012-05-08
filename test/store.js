@@ -196,6 +196,21 @@ vows.describe("Blob storage")
 })
 
 .addBatch({
+  "The API": {
+    "has a count method": {
+      topic: function() {
+        var api = new API(config.server_host, config.server_port);
+        api.count(this.callback);
+      },
+
+      "that works": function(count) {
+        assert(count === 1001);
+      }
+    }
+  }
+})
+
+.addBatch({
   "In the end": {
     topic: function() {
       var cb = this.callback;
@@ -212,6 +227,7 @@ vows.describe("Blob storage")
       assert(stopped === true);
     },
 
+/*
     "the database": {
       topic: function() {
         deleteDB(this.callback);
@@ -221,6 +237,7 @@ vows.describe("Blob storage")
         assert(exists === false);
       }
     }
+*/
   }
 })
 

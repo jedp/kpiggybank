@@ -79,11 +79,15 @@ The callback is optional.
 
 To query a range:
 
-    api.fetchRange(start, end, yourcalback);
+    api.fetchRange(start, end, callback);
 
 `end` is optional, so you can query all records after a given start time:
 
-    api.fetchRange(start, yourcallback);
+    api.fetchRange(start, callback);
+
+To count the number of records:
+
+    api.count(callback);  // returns an integer
 
 HTTP API
 --------
@@ -109,4 +113,9 @@ Retrieve a range of records; returns a JSON string.
 - url: `/wsapi/interaction_data?start=<date-start>&end=<date-end>`
 - method: GET
 
+*Count Records*
 
+Retrieve a count of the number of records; returns a JSON encoded number.
+
+- url: `/wsapi/interaction_data/count`
+- method: GET
