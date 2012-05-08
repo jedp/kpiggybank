@@ -114,6 +114,8 @@ function makeBlob(timestamp) {
   };
 };
 
+var START_TIME = 1333046104322;
+
 vows.describe("Blob storage")
 
 .addBatch({
@@ -153,7 +155,7 @@ vows.describe("Blob storage")
 .addBatch({
   "Many blobs with sequential timestamps can be stored": {
     topic: function() {
-      var start_time = new Date();
+      var start_date = new Date();
       // our actual api
       var api = new API(config.server_host, config.server_port);
       // a lower-level handle on couchdb so we can query it directly
@@ -161,7 +163,7 @@ vows.describe("Blob storage")
       var db = conn.database(config.couchdb_db);
       var cb = this.callback;
       var i;
-      var start = 1333046104322; // realistic timestamp
+      var start = START_TIME;
       var finish = start + 1000;
       var blob;
       for (i=start; i<=finish; i++) {
@@ -170,12 +172,12 @@ vows.describe("Blob storage")
       }
       // last record should have been saved within a second
       expectEventually("timestamp", finish, db, 1000, function(err, results) {
-        return cb(results, start_time);
+        return cb(results, start_date);
       });
     },
 
-    "successfully": function(obj, start_time) {
-      assert(parseInt(obj.timestamp, 10) === (1333046104322 + 1000));
+    "successfully": function(obj, start_date) {
+      assert(parseInt(obj.timestamp, 10) === (START_TIME + 1000));
     },
 
     /*
@@ -184,11 +186,12 @@ vows.describe("Blob storage")
      * So we should be able to keep pace with that.  
      */
 
-    "at the rate we expect for signins by 1M users": function(obj, start_time) {
+    "at the rate we expect for signins by 1M users": function(obj, start_date) {
       // Be able to store data twice as fast as we expect it to arrive.
       // Here, less than 5 secs for what should take 10 secs to arrive.
-      assert((new Date()) - start_time < (5000));
-    }
+      assert((new Date()) - start_date < (5000));
+    },
+
   }
 })
 
