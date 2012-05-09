@@ -35,14 +35,14 @@ Running
 For configuration, the file `env.sh.dist` can be copied to `env.sh` and edited.
 kpiggybank will look for the following environment variables:
 
-- `KPIG_COUCHDB_HOST`: IP addr of couch server.  Default "127.0.0.1".
-- `KPIG_COUCHDB_PORT`: Port number of couch server.  Default "5984".
-- `KPIG_COUCHDB_DB`: Name of the database.  Default "bid_kpi".
-- `KPIG_COUCHDB_USER`: Username for database if required.  Default "kpiggybank".
-- `KPIG_COUCHDB_PASS`: Password for database if required.  Default "kpiggybank".
-- `KPIG_SERVER_HOST`: "127.0.0.1"
-- `KPIG_SERVER_PORT`: Port for the kpiggybank server.  Default "3000".
-- `KPIG_SERVER_MODE`: Governs how verbose logging should be.  Set to "prod" for quieter logging.  Default "dev".
+- `COUCHDB_HOST`: IP addr of couch server.  Default "127.0.0.1".
+- `COUCHDB_PORT`: Port number of couch server.  Default "5984".
+- `COUCHDB_DB`: Name of the database.  Default "bid_kpi".
+- `COUCHDB_USER`: Username for database if required.  Default "kpiggybank".
+- `COUCHDB_PASS`: Password for database if required.  Default "kpiggybank".
+- `HOST`: "127.0.0.1"
+- `PORT`: Port for the kpiggybank server.  Default "3000".
+- `MODE`: Governs how verbose logging should be.  Set to "prod" for quieter logging.  Default "dev".
 
 Start the server like so:
 
