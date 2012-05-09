@@ -13,3 +13,5 @@ env.sh
 node_modules
 .gitmodules
 
+# awsbox setup notes
+awsbox_notes.txt

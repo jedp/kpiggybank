@@ -135,6 +135,7 @@ vows.describe("Blob storage")
         kpiggybankProcess = spawn('node', [server_exec]);
         kpiggybankProcess.stdout.on('data', function(buf) {
           buf.toString().split("\n").forEach(function(line) {
+            console.log("subprocess: " + line);
             if (/kpiggybank listening/.test(line)) {
               return cb(null, true);
             }
@@ -231,6 +232,29 @@ vows.describe("Blob storage")
     },
   }
 })
+
+/*
+ * in progress ...
+
+.addBatch({
+  "Streaming": {
+    topic: function() {
+      var api = new API(config.server_host, config.server_port);
+      console.log("setting up streaming");
+      api.followChanges();
+      console.log("followed changes");
+      api.on('change', this.callback);
+      console.log("registered handler");
+      api.saveData(makeBlob(1336575273), function(err,res) { console.log("saved: " + err + " " + res)});
+    }, 
+
+    "works": function(blob) {
+      console.log("got " + err + " " + blob);
+      assert(blob.timestamp === 1336575273);
+    }
+  }
+})
+*/
 
 .addBatch({
   "In the end": {
