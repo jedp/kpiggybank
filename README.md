@@ -67,28 +67,56 @@ test suite.
 JS API
 ------
 
+### Methods
+
+`api.saveData(blob [, callback])` - save a hopefully valid event blob
+`api.fetchRange([ options, ] callback)` - fetch some or all events
+`api.count(callback)` - get number of records in DB
+`api.followChanges()` - connect to event stream
+
+### Events
+
+`change` - a newly-arrived json blob of delicious KPI data
+`error` - oh noes
+
+### Examples
+
 The HTTP API calls are wrapped for convenience in a JS module.  You can of 
 course call the HTTP methods directly if you want.  Example of using the JS
 API:
 
+``` js
     var API = require("lib/api");
     var api = new API(server_host, server_port);
     api.saveData(yourblob, yourcallback);
+```
 
 The callback is optional.
 
 To query a range:
 
+``` js
     var options = {start: 1, end: 42}; // optional 
     api.fetchRange(options, callback);
+```
 
 options are ... optional, so you can get all records like so:
 
+``` js
     api.fetchRange(callback);
+```
 
-To count the number of records:
+Subscribe to changes stream.  The changes stream is an event emitter.  Use like
+so:
 
-    api.count(callback);  // returns an integer
+``` js
+    api.followChanges()  // now subscribed
+
+    api.on('change', function(change) {
+        // do something visually stunning
+    });
+```
+
 
 HTTP API
 --------
