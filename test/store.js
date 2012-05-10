@@ -10,12 +10,12 @@ var DB = require("../lib/db");
 // This will be picked up by the server and db config
 
 // Use a test db so we can create and delete it.
-process.env['KPIG_COUCHDB_DB'] = "bid_kpi_test";
+process.env['COUCHDB_DB'] = "bid_kpi_test";
 
 // Don't search for an open port; always keep the same port for testing.
 // That way we'll get some feedback right away if the previous test didn't
 // clean up properly :)
-process.env['KPIG_SERVER_PORT'] = "3042";
+process.env['SERVER_PORT'] = "3042";
 
 // After env is set, we can get config (because config reads env)
 var config = require("../lib/config");
@@ -46,26 +46,22 @@ function deleteDB(callback) {
 function expectEventually(key, value, db, interval, callback) {
   value = value.toString();
   function retrieveWithinTime(time) {
-    db.temporaryView(
-      {
-        map: function (doc) {
-         emit(doc._id, doc);
-       }
-      }, 
-      function (err, results) {
+    db.view('data/all', {}, function (err, results) {
         // If there was an error (like not_found) or the expected value
         // is not in the result set, try again in a little while.  Back
         // off the time until the interval is exceeded.  If nothing
         // is discovered, callback with an error.
         var found = false;
+
         if ((!err) && (results.length > 0)) {
           results.forEach(function(result) {
-            if (result[key] === value) {
+            if (result[key] == value) {
               found = true;
               return callback(null, result);
             }
           });
-        }
+        } 
+
         if (time < interval) {
           time *= 2;
           setTimeout(function() {
@@ -165,7 +161,7 @@ vows.describe("Blob storage")
       var cb = this.callback;
       var i;
       var start = START_TIME;
-      var finish = start + 1000;
+      var finish = start + 100;
       var blob;
       for (i=start; i<=finish; i++) {
         blob = makeBlob(i);
@@ -178,7 +174,7 @@ vows.describe("Blob storage")
     },
 
     "successfully": function(obj, start_date) {
-      assert(parseInt(obj.timestamp, 10) === (START_TIME + 1000));
+      assert(obj.timestamp === (START_TIME + 100));
     },
 
     /*
@@ -205,7 +201,7 @@ vows.describe("Blob storage")
       },
 
       "that works": function(count) {
-        assert(count === 1001);
+        assert(count === 101);
       }
     }, 
 
@@ -215,7 +211,7 @@ vows.describe("Blob storage")
         api.fetchRange({start: START_TIME, end: START_TIME+9}, this.callback);
       },
 
-      "successfully": function(err, records) {
+      "successfully": function(records) {
         assert(records.length === 10);
       }
     },
@@ -223,10 +219,10 @@ vows.describe("Blob storage")
     "can fetch by open date range": {
       topic: function() {
         var api = new API(config.server_host, config.server_port);
-        api.fetchRange({start: START_TIME+991}, this.callback);
+        api.fetchRange({start: START_TIME+91}, this.callback);
       },
 
-      "successfully": function(err, records) {
+      "successfully": function(records) {
         assert(records.length === 10);
       }
     },
