@@ -1,2 +1,68 @@
-div kpiggybank!  More info:   
-  a(href='https://github.com/jedp/kpiggybank') https://github.com/jedp/kpiggybank
+#blob-template(style="display: none")
+  div {{ user_agent.os }} {{ user_agent.browser }} {{ user_agent.version }}
+  div {{ timestamp }}
+
+
+div(class='columns left')
+
+  h2 KPI Data
+
+  div This is a service for storing and fetching 
+    a(href='https://wiki.mozilla.org/Privacy/Reviews/KPI_Backend') Key Performance Indicator 
+    | data for 
+    a(href='https://browserid.org/about') BrowserID
+    | .
+
+  div You can use either the HTTP or the JavaScript API.
+
+  h3 HTTP API
+
+  dl
+    dt get range
+    dd
+      code GET  /wsapi/interaction_data[?start=<timestamp>&end=<timestamp>]
+    dt store blob
+    dd
+      code POST /wsapi/interaction_data
+    dt stream changes
+    dd
+      code GET  /wsapi/interaction_data/stream
+
+  h3 JavaScript API
+
+  dl
+    dt get range
+    dd 
+      code api.fetchRange(
+        span.option [options,]
+        |  callback);
+    dt store blob
+    dd
+      code api.saveData(blob
+        span.option [, callback]
+        | );
+    dt stream changes
+    dd 
+      code
+        |api.followChanges();
+        |api.on('change', callback);
+
+  h3 Documentation
+
+  div For more detail, see the 
+    a(href='https://github.com/jedp/kpiggybank/blob/master/README.md') documentation 
+    | on github.
+
+div(class='columns right')
+
+  h2 Latest KPI Events
+
+  #stream
+
+script
+  head.ready(function() {
+    var app = new App;
+    var appView = new AppView({model:app});
+  });
+
+

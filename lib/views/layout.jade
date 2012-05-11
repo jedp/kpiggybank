@@ -1,9 +1,33 @@
 !!!5
 html
   head
-    title KPIggyBank
+    title KPIggyBank: Big pot o' Key Performance Indicator data
+
+    link(rel='stylesheet', href='/css/style.css')
+    script(src='/js/head.min.js')
+    
   body
 
-    #content!= body
+    a(href='http://github.com/jedp/kpiggybank', id='fork')
+      img(src='/img/github.png')
 
 
+    .container
+
+      #header 
+        h1 KPIggyBank
+
+      #content
+
+        != body
+
+    script
+      head.js(
+        {jquery:        "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"},
+        {underscore:    "/js/underscore-min.js"},
+        {backbone:      "/js/backbone-min.js"},
+        {socket_io:     "/socket.io/socket.io.js"},
+        {app:           "/js/client.js"}
+      );
+  
+  
