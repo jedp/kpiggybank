@@ -56,11 +56,17 @@ table {
  End of reset
  */
 
+.wf-loading body {
+  visiblity: hidden;
+}
+
 body {
   font-family: sans-serif;
   background-color: #ccc;
   color: #000;
-  font-size: 14px;
+  font-family: "ff-meta-web-pro-condensed-1", "ff-meta-web-pro-condensed-2", sans-serif; 
+  font-weight: 500;
+  font-size: 16px;
   padding: 0px;
 }
 
@@ -69,17 +75,23 @@ a {
 }
 
 h1 {
-  font-size: 24px;
+  font-family: "ff-meta-web-pro-1", "ff-meta-web-pro-2", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
 }
 
 h2 {
-  font-size: 20px;
-  padding: 0em 0em 1em 0em;
+  font-family: "ff-meta-web-pro-1", "ff-meta-web-pro-2", sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  padding: 0em 0em .6em 0em;
 }
 
 h3 {
-  font-size: 14px;
-  padding: 2em 0em .6em 0em;
+  font-family: "ff-meta-web-pro-1", "ff-meta-web-pro-2", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 1em 0em .3em 0em;
 }
 
 .option {
@@ -97,7 +109,8 @@ pre, code {
   -webkit-border-radius: 6px;
   -border-radius: 6px;
   border: 1px solid #999;
-  font-family: monospace;
+  font-family: "ocr-b-std-1","ocr-b-std-2",monospace;
+  font-weight: 400;
   font-size: 12px;
   padding: 4px;
   margin: 2px;
@@ -157,7 +170,7 @@ dd {
   -border-radius: 6px;
   border: 1px solid #999;
   margin: 4px 0px;
-  padding: .6em;
+  padding: 2px 6px;
   position: relative;
 }
 
