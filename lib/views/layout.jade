@@ -26,6 +26,7 @@ html(class='wf-loading')
       head.js(
         // {jquery:        "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"},
         {jquery:        "/js/jquery.min.js"},
+        {noisy:         "/js/jquery.noisy.min.js"},
         {underscore:    "/js/underscore-min.js"},
         {backbone:      "/js/backbone-min.js"},
         {socket_io:     "/socket.io/socket.io.js"},
@@ -34,6 +35,8 @@ html(class='wf-loading')
 
       // fight fout
       head.ready(function() {
+        $('body').noisy();
+
         if (typeof Typekit != 'undefined') {
           try { 
               Typekit.load({
