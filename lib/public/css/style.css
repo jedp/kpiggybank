@@ -163,6 +163,7 @@ dd {
 }
 
 .blob {
+  positon: relative;
   font-size: 1em;
   background-color: #bbb;
   -moz-border-radius: 6px;
@@ -173,6 +174,15 @@ dd {
   padding: 2px 6px;
   position: relative;
 }
+
+.blob .timestamp {
+  font-weight: 400;
+  font-family: "ocr-b-std-1","ocr-b-std-2",monospace;
+  color: #666;
+  float: right;
+  margin-right: 0;
+}
+
 
 
 /*

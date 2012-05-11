@@ -1,6 +1,9 @@
 #blob-template(style="display: none")
-  div {{ user_agent.os }} {{ user_agent.browser }} {{ user_agent.version }}
-  div {{ timestamp }}
+  div 
+    span.ua {{ user_agent.os }} {{ user_agent.browser }} {{ user_agent.version }}
+  div 
+    span.duration {{ duration }} sec.
+    span.timestamp {{ timestamp }}
 
 
 div(class='columns left')
