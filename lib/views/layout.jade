@@ -1,15 +1,12 @@
 !!!5
-html
+html(class='wf-loading')
   head
     title KPIggyBank: Big pot o' Key Performance Indicator data
 
     link(rel='stylesheet', href='/css/style.css')
-    script(src='http://use.typekit.com/apf1hll.js');
+    script(src='http://use.typekit.com/apf1hll.js')
     script(src='/js/head.min.js')
 
-    script
-      try{Typekit.load();}catch(e){}
-    
   body
 
     a(href='http://github.com/jedp/kpiggybank', id='fork')
@@ -27,11 +24,36 @@ html
 
     script
       head.js(
-        {jquery:        "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"},
+        // {jquery:        "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"},
+        {jquery:        "/js/jquery.min.js"},
         {underscore:    "/js/underscore-min.js"},
         {backbone:      "/js/backbone-min.js"},
         {socket_io:     "/socket.io/socket.io.js"},
         {app:           "/js/client.js"}
       );
+
+      // fight fout
+      head.ready(function() {
+        if (typeof Typekit != 'undefined') {
+          try { 
+              Typekit.load({
+                  active: function() {
+                      // it worked. carry on ...
+                      $('html').addClass('wf-active').removeClass('wf-loading');
+                  },
+                  inactive: function() {
+                      // it didn't work! drat ...
+                      $('html').addClass('wf-inactive').removeClass('wf-loading');
+                  }
+              }); 
+          } catch(e) {
+              // probably want to fall back to no typekit
+              $('html').addClass('wf-inactive').removeClass('wf-loading');
+          }
+        } else {
+            // typekit js is unavailable; so set html to wf-inactive class
+            $('html').addClass('wf-inactive').removeClass('wf-loading');
+        }
+      });
   
   
