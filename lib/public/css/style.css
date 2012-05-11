@@ -175,12 +175,16 @@ dd {
   position: relative;
 }
 
+.blob .duration {
+  float: right;
+  margin-right: 0;
+}
+
 .blob .timestamp {
   font-weight: 400;
   font-family: "ocr-b-std-1","ocr-b-std-2",monospace;
+  font-size: 14px;
   color: #666;
-  float: right;
-  margin-right: 0;
 }
 
 
