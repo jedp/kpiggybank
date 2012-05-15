@@ -1,9 +1,12 @@
 #blob-template(style="display: none")
-  div 
+  div
     span.ua {{ user_agent.os }} {{ user_agent.browser }} {{ user_agent.version }}
     span.duration {{ duration }} sec.
   div 
     span.timestamp {{ readableDate }}
+    span.viewlink 
+      a(href='#') view
+
 
 
 div(class='columns left')

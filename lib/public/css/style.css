@@ -187,7 +187,11 @@ dd {
   color: #666;
 }
 
-
+.blob .viewlink {
+  float: right;
+  margin-right: 0;
+  font-style: italic;
+}
 
 /*
  * Flexible two-column layout
