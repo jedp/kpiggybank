@@ -206,7 +206,6 @@ vows.describe("Blob storage")
       assert(stopped === true);
     },
 
-/*
     "the database": {
       topic: function() {
         deleteDB(this.callback);
@@ -216,7 +215,6 @@ vows.describe("Blob storage")
         assert(exists === false);
       }
     }
-*/
   }
 })
 
