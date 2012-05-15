@@ -11,19 +11,19 @@ var utils = require("./utils");
 
 // Set up the env for testing
 // This will be picked up by the server and db config
-process.env['DB_BACKEND'] = "memory";
-process.env['DB_DB'] = "bid_kpi_test_mem";
+var subprocessEnv = uscore.clone(process.env);
+subprocessEnv['DB_BACKEND'] = "memory";
+subprocessEnv['DB_NAME'] = "bid_kpi_test_mem";
+var serverPort = subprocessEnv['PORT'] = "3043";
 
 // Don't search for an open port; always keep the same port for testing.
 // That way we'll get some feedback right away if the previous test didn't
 // clean up properly :)
-//process.env['PORT'] = "3043";
 
 
 // After env is set, we can get config (because config reads env)
-var config = require("../lib/config");
 
-var BACKEND_URL = 'http://127.0.0.1:' + config.server_port;
+var BACKEND_URL = 'http://127.0.0.1:' + serverPort;
 
 var POST_BLOB_URL = BACKEND_URL + '/wsapi/interaction_data'
 var GET_BLOB_URL = BACKEND_URL + '/wsapi/interaction_data'
@@ -105,7 +105,7 @@ vows.describe("HTTP Server")
     topic: function() {
       var cb = this.callback;
       var server_exec = path.join(__dirname, '..', 'lib', 'server.js');
-      kpiggybankProcess = spawn('node', [server_exec])
+      kpiggybankProcess = spawn('node', [server_exec], {env: subprocessEnv})
       kpiggybankProcess.stdout.on('data', function(buf) {
         buf.toString().split("\n").forEach(function(line) {
           //if (line.trim()) logger.info("server: " + line.trim());

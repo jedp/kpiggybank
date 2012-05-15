@@ -31,7 +31,7 @@ module.exports.expectEventually = function expectEventually(key, value, db, inte
             retrieveWithinTime(time);
           }, time);
         } else {
-          if (!found) return callback(new Error("Not found"));
+          if (!found) return callback(new Error(key + "=" + value + " not found within " + interval + "ms"));
         }
       }
     );
@@ -47,6 +47,7 @@ module.exports.expectEventually = function expectEventually(key, value, db, inte
  */
 module.exports.makeBlob = function makeBlob(timestamp) {
   timestamp = timestamp || (new Date()).getTime();
+
   return {
     "timestamp": timestamp,
     "event_stream": [
