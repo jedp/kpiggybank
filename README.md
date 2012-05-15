@@ -8,7 +8,7 @@ Node.JS + CouchDB.
 Requirements
 ------------
 
-- An accessible CouchDB server
+- An accessible CouchDB server for persistence.
 - Node.JS (0.6.17 or greater)
 
 Installation
@@ -29,17 +29,25 @@ It is anticipated that, with 1 million users, BrowserID will generate some
 can completely store and retrieve records at a rate at least twice as fast
 as this.
 
+If you want to experiment with the server without having couch installed, 
+use the in-memory data store:
+
+    DB_BACKEND=memory node lib/server.js
+
+Note that the in-memory data is not saved anywhere.  It's just for testing.
+
 Running
 -------
 
 For configuration, the file `env.sh.dist` can be copied to `env.sh` and edited.
 kpiggybank will look for the following environment variables:
 
-- `COUCHDB_HOST`: IP addr of couch server.  Default "127.0.0.1".
-- `COUCHDB_PORT`: Port number of couch server.  Default "5984".
-- `COUCHDB_DB`: Name of the database.  Default "bid_kpi".
-- `COUCHDB_USER`: Username for database if required.  Default "kpiggybank".
-- `COUCHDB_PASS`: Password for database if required.  Default "kpiggybank".
+- `DB_BACKEND`: One of "couchdb", "memory", "dummy". Default "couchdb".
+- `DB_HOST`: IP addr of couch server.  Default "127.0.0.1".
+- `DB_PORT`: Port number of couch server.  Default "5984".
+- `DB_NAME`: Name of the database.  Default "bid_kpi".
+- `DB_USER`: Username for database if required.  Default "kpiggybank".
+- `DB_PASS`: Password for database if required.  Default "kpiggybank".
 - `HOST`: "127.0.0.1"
 - `PORT`: Port for the kpiggybank server.  Default "3000".
 - `MODE`: Governs how verbose logging should be.  Set to "prod" for quieter logging.  Default "dev".
@@ -55,7 +63,7 @@ Or like so:
 
 Or change your env configuration with something like:
 
-- `KPIG_COUCHDB_DB=bid_kpi_test npm start`
+- `DB_NAME=bid_kpi_test npm start`
 
 When running kpiggybank for the first time on a given database, it will 
 ensure that the db exists, creating it if it doesn't.
