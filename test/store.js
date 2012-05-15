@@ -10,7 +10,8 @@ var DB = require("../lib/db");
 // This will be picked up by the server and db config
 
 // Use a test db so we can create and delete it.
-process.env['COUCHDB_DB'] = "bid_kpi_test";
+process.env['DB_BACKEND'] = "couchdb";
+process.env['DB_DB'] = "bid_kpi_test";
 
 // Don't search for an open port; always keep the same port for testing.
 // That way we'll get some feedback right away if the previous test didn't
@@ -25,12 +26,12 @@ var kpiggybankProcess = undefined;
 // delete the database.
 // Do this when setting up and tearing down the test suite.
 function deleteDB(callback) {
-  var db = new DB(function(err) {
+  var db = new DB(config.db_backend, function(err) {
     if (err) return callback(err);
 
-    db.db.destroy(function(err) {
+    db.destroy(function(err) {
       if (err) return callback(err);
-      return db.db.exists(callback);
+      return db.exists(callback);
     });
   });
 }
@@ -156,8 +157,8 @@ vows.describe("Blob storage")
       // our actual api
       var api = new API(config.server_host, config.server_port);
       // a lower-level handle on couchdb so we can query it directly
-      var conn = new (cradle.Connection)(config.couchdb_host, config.couchdb_port);
-      var db = conn.database(config.couchdb_db);
+      var conn = new (cradle.Connection)(config.db_host, config.db_port);
+      var db = conn.database(config.db_db);
       var cb = this.callback;
       var i;
       var start = START_TIME;
