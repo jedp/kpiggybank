@@ -1,13 +1,20 @@
-#blob-template(style="display: none")
+#stream-item-template(style="display: none")
   div
     span.ua {{ user_agent.os }} {{ user_agent.browser }} {{ user_agent.version }}
     span.duration {{ duration }} sec.
   div 
     span.timestamp {{ readableDate }}
-    span.viewlink 
+    span.viewLink 
       a(href='#') view
 
+#blob-view-template(style="display: none")
+  div
+    .closeButton 
+      a(href='#') close
 
+  pre.blob_text {{ pp_text }}
+
+div(class='columns left overlay', id='blobDisplay')
 
 div(class='columns left')
 

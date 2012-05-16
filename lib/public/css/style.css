@@ -162,7 +162,7 @@ dd {
 #stream {
 }
 
-.blob {
+.stream_item {
   positon: relative;
   font-size: 1em;
   background-color: #bbb;
@@ -175,19 +175,19 @@ dd {
   position: relative;
 }
 
-.blob .duration {
+.stream_item .duration {
   float: right;
   margin-right: 0;
 }
 
-.blob .timestamp {
+.stream_item .timestamp {
   font-weight: 400;
   font-family: "ocr-b-std-1","ocr-b-std-2",monospace;
   font-size: 12px;
   color: #666;
 }
 
-.blob .viewlink {
+.stream_item .viewLink {
   float: right;
   margin-right: 0;
   font-style: italic;
@@ -219,6 +219,43 @@ dd {
 .left { 
   width: 640px;
   margin-left: 0;
+}
+
+#blobDisplay {
+  background: #ccc;
+}
+
+#blobDisplay pre {
+  font-size: 10px;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  z-index: 5;
+}
+
+.closeButton {
+  float: right;
+  margin-right: 6px;
+  border: 1px solid #c33;
+  padding: 3px 6px 1px 6px;  /* small caps have weird leading */
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -border-radius: 4px;
+}
+.closeButton:hover {
+  background: #edd;
+}
+
+.closeButton a,
+.closeButton a:visited,
+.closeButton a:active,
+.closeButton a:hover
+{
+  font-variant: small-caps;
+  font-weight: bold;
+  color: #c33;
 }
 
 .right {
