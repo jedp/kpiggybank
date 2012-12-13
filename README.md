@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/jedp/kpiggybank.png)](http://travis-ci.org/jedp/kpiggybank)
 KPIggyBank
 ==========
 
